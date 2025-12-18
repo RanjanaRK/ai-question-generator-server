@@ -1,13 +1,11 @@
 import { Request, Response, Router } from "express";
-import { uploadPdf } from "../controllers/pdfController";
+
 import multer from "multer";
+import { uploadPdf } from "../controllers/pdfController";
 
 const router = Router();
 const upload = multer({ dest: "uploads/" });
 
-router.post("/upload", upload.single("file"), (req: Request, res: Response) => {
-  console.log(req.body);
-  console.log(req.file);
-});
+router.post("/upload", upload.single("file"), uploadPdf);
 
 export default router;
