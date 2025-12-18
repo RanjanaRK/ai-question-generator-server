@@ -1,11 +1,14 @@
 import { Request, Response, Router } from "express";
 
 import multer from "multer";
-import { uploadPdf } from "../controllers/pdfController";
+import { pdfToQaController } from "../controllers/pdfToQaController";
 
 const router = Router();
-const upload = multer({ dest: "uploads/" });
+const upload = multer({
+  dest: "uploads/",
+  limits: { fileSize: 10 * 1024 * 1024 },
+});
 
-router.post("/upload", upload.single("file"), uploadPdf);
+router.post("/upload", upload.single("file"), pdfToQaController);
 
 export default router;
