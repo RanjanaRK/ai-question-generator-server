@@ -28,30 +28,62 @@
 //     res.status(500).json({ error: err.message });
 //   }
 // };
+// import { Request, Response } from "express";
+// import fs from "fs/promises";
+// import pdfParse, { PDFParse } from "pdf-parse";
+
+// export const uploadPdf = async (req: Request, res: Response) => {
+//   try {
+//     if (!req.file) {
+//       return res.status(400).json({ message: "No file uploaded" });
+//     }
+//     console.log("file path", req.file.path);
+
+//     const buffer = await fs.readFile(req.file.path);
+//     console.log("buffer", buffer);
+
+//     const parser = new PDFParse(buffer);
+
+//     const result = await parser.getText();
+
+//     // const data = await pdfParse(buffer);
+
+//     const abc = await fs.unlink(req.file.path);
+
+//     console.log("dataaaaa", result);
+//     console.log("parser", parser);
+//     console.log("unlink msg", abc);
+
+//     res.json({
+//       message: "PDF uploaded successfully",
+//       text: result.text.length,
+//     });
+//   } catch (err: any) {
+//     console.error(err);
+//     res.status(500).json({ error: err.message });
+//   }
+// };
+
 import { Request, Response } from "express";
 import fs from "fs/promises";
-import { PDFParse } from "pdf-parse";
+const pdfParse = require("pdf-parse");
 
 export const uploadPdf = async (req: Request, res: Response) => {
   try {
     if (!req.file) {
       return res.status(400).json({ message: "No file uploaded" });
     }
-    console.log("file path", req.file.path);
 
     const buffer = await fs.readFile(req.file.path);
-    console.log("buffer", buffer);
 
-    const data = new PDFParse(buffer);
+    const data = await pdfParse(new Uint8Array(buffer));
 
-    const abc = await fs.unlink(req.file.path);
-
-    console.log("dataaaaa", data);
-    console.log("unlink msg", abc);
+    await fs.unlink(req.file.path);
 
     res.json({
       message: "PDF uploaded successfully",
-      text: data,
+      textPreview: data.text.slice(0, 500),
+      pages: data.numpages,
     });
   } catch (err: any) {
     console.error(err);
