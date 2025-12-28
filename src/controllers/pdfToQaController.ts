@@ -2,8 +2,6 @@ import fs from "fs";
 import { Request, Response } from "express";
 import { PDFParse } from "pdf-parse";
 
-const pdfParse = require("pdf-parse").default;
-
 export const pdfToQaController = async (req: Request, res: Response) => {
   if (!req.file?.path) {
     return res.status(400).json({ message: "No file uploaded" });
