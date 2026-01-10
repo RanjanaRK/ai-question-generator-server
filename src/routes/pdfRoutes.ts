@@ -11,11 +11,9 @@ const storage = multer.diskStorage({
     cb(null, "uploads/");
   },
   filename: function (req, file, cb) {
-    const ext = path.extname(file.originalname); // .pdf
+    const ext = path.extname(file.originalname);
     const base = path.basename(file.originalname, ext).replace(/\s+/g, "_");
-
     const unique = Date.now() + "-" + Math.round(Math.random() * 1e9);
-
     cb(null, `${base}-${unique}${ext}`);
   },
 });
