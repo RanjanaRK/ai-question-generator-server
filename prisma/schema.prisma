@@ -20,8 +20,17 @@ model User{
    email  String @unique
    password String
    createdAt DateTime @default(now())
+   pdfDocs PdfDocument[]
 }
 
 
 
 
+model PdfDocument{
+  id String @default(uuid()) @id
+  originalName String 
+   path  String @unique
+   createdAt DateTime @default(now())
+   userId String
+   user User @relation(fields: [userId], references: [id])
+}
