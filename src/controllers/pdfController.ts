@@ -90,3 +90,31 @@
 //     res.status(500).json({ error: err.message });
 //   }
 // };
+
+// model User{
+//    id String @default(uuid()) @id
+//    name String
+//    email  String @unique
+//    password String
+//    createdAt DateTime @default(now())
+//    pdfDocs PdfDocument[]
+// }
+
+// model PdfDocument{
+//   id String @default(uuid()) @id
+//   originalName String
+//   storagePath  String
+//   createdAt DateTime @default(now())
+//   userId String
+//   user User @relation(fields: [userId], references: [id])
+//   chunks PdfChunk[]
+// }
+
+// model PdfChunk {
+//   id       String @default(uuid()) @id
+//   content  String
+//   createdAt DateTime @default(now())
+//   pdfId     String
+//   pdf       PdfDocument @relation(fields: [pdfId],references: [id])
+
+// }
