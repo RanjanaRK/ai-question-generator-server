@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { uploadPdfStorage } from "../lib/storage";
+import { prisma } from "../lib/prisma";
 
 export const uploadPdf = async (req: Request, res: Response) => {
   const file = req.file!;
@@ -22,6 +23,11 @@ export const uploadPdf = async (req: Request, res: Response) => {
     );
 
     //  save metadata
-    // const pdf = await prisma.
+    const pdf = await prisma.pdfDocument.create({
+      data: {
+        originalName: file.originalname,
+        storagePath: storagePath,
+      },
+    });
   } catch (error) {}
 };
