@@ -35,5 +35,7 @@ export const uploadPdf = async (req: Request, res: Response) => {
     const text = await pdfParsing(file.path);
 
     res.json({ success: true, pdfId: pdf.id, text });
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+  }
 };

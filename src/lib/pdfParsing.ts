@@ -19,9 +19,9 @@ export const pdfParsing = async (filePath: string) => {
   const uint8Array = new Uint8Array(buffer);
   const data = new PDFParse(uint8Array);
   const result = data.getText({
-    // bypass TypeScript type check
     standardFontDataUrl:
-      "https://github.com/mozilla/pdf.js/raw/master/external/standard_fonts/",
+      "D:/PDFScribe/nodejs/node_modules/pdfjs-dist/standard_fonts",
   } as any);
+
   return result;
 };
