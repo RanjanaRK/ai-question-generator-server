@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { uploadPdfStorage } from "../lib/storage";
 import { prisma } from "../lib/prisma";
+import { pdfParsing } from "../lib/pdfParsing";
 
 export const uploadPdf = async (req: Request, res: Response) => {
   const file = req.file!;
@@ -29,5 +30,10 @@ export const uploadPdf = async (req: Request, res: Response) => {
         storagePath: storagePath,
       },
     });
+
+    //  parse pdf
+    const text = await pdfParsing(file.path);
+
+    res.json({ success: true, pdfId: pdf.id, text });
   } catch (error) {}
 };

@@ -17,3 +17,40 @@ export const pdfToQaController = async (req: Request, res: Response) => {
     preview: (await result).text,
   });
 };
+
+// generator client {
+//   provider = "prisma-client-js"
+//   output   = "../src/generated/prisma"
+// }
+
+// datasource db {
+//   provider = "postgresql"
+// }
+
+// model User {
+//   id        String   @id @default(uuid())
+//   name      String
+//   email     String   @unique
+//   password  String
+//   createdAt DateTime @default(now())
+//   pdfs      PdfDocument[]
+// }
+
+// model PdfDocument{
+//   id String @default(uuid()) @id
+//   originalName String
+//   storagePath  String
+//   createdAt DateTime @default(now())
+//   userId String?
+//   user User? @relation(fields: [userId], references: [id])
+//   chunks PdfChunk[]
+// }
+
+// model PdfChunk {
+//   id       String @default(uuid()) @id
+//   content  String
+//   createdAt DateTime @default(now())
+//   pdfId     String
+//   pdf       PdfDocument @relation(fields: [pdfId],references: [id])
+
+// }
