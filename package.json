@@ -24,7 +24,7 @@
   "homepage": "https://github.com/RanjanaRK/ai-question-generator-server#readme",
   "dependencies": {
     "@prisma/adapter-pg": "^7.2.0",
-    "@prisma/client": "^7.2.0",
+    "@prisma/client": "^6.19.2",
     "@supabase/supabase-js": "^2.90.1",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
@@ -32,7 +32,7 @@
     "multer": "^2.0.2",
     "pdf-parse": "^2.4.5",
     "pg": "^8.17.1",
-    "prisma": "^7.2.0"
+    "prisma": "^6.19.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
