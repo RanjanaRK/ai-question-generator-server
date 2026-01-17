@@ -1,38 +1,44 @@
 
-generator client {
+  generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id        String   @id @default(uuid())
+  id        String        @id @default(uuid())
   name      String
-  email     String   @unique
+  email     String        @unique
   password  String
-  createdAt DateTime @default(now())
+  createdAt DateTime      @default(now())
+
   pdfs      PdfDocument[]
 }
 
-model PdfDocument{
-  id String @default(uuid()) @id
+model PdfDocument {
+  id           String      @id @default(uuid())
   originalName String
   storagePath  String
-  createdAt DateTime @default(now())
-  userId String?
-  user User? @relation(fields: [userId], references: [id])
-  chunks PdfChunk[]
+  createdAt    DateTime    @default(now())
+
+  userId       String?
+  user         User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  chunks       PdfChunk[]
+
+  @@index([userId])
 }
 
 model PdfChunk {
-  id       String @default(uuid()) @id
-  content  String
-  createdAt DateTime @default(now())
-  pdfId     String
-  pdf       PdfDocument @relation(fields: [pdfId],references: [id])
+  id        String      @id @default(uuid())
+  content   String
+  createdAt DateTime    @default(now())
 
+  pdfId     String
+  pdf       PdfDocument @relation(fields: [pdfId], references: [id], onDelete: Cascade)
+
+  @@index([pdfId])
 }
