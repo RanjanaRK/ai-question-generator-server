@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { uploadPdfStorage } from "../lib/storage";
 import { prisma } from "../lib/prisma";
 import { pdfParsing } from "../lib/pdfParsing";
+import { chunkText } from "../lib/chunkText";
 
 export const uploadPdf = async (req: Request, res: Response) => {
   const file = req.file!;
@@ -20,7 +21,7 @@ export const uploadPdf = async (req: Request, res: Response) => {
       "pdfs",
       file.path,
       storagePath,
-      file.mimetype
+      file.mimetype,
     );
 
     //  save metadata
@@ -33,6 +34,10 @@ export const uploadPdf = async (req: Request, res: Response) => {
 
     //  parse pdf
     const text = await pdfParsing(file.path);
+
+    // chunk text
+
+    const chunking = chunkText(text.text);
 
     res.json({ success: true, pdfId: pdf.id, text });
   } catch (error) {
