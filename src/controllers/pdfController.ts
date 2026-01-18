@@ -38,10 +38,6 @@ export const uploadPdf = async (req: Request, res: Response) => {
       },
     });
 
-    // chunk text
-
-    const chunking = chunkText(text.text);
-
     res.json({ success: true, pdfId: pdf.id, text });
   } catch (error) {
     console.error(error);
