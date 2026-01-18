@@ -5,14 +5,16 @@ import { pdfParsing } from "../lib/pdfParsing";
 import { chunkText } from "../lib/chunkText";
 
 export const uploadPdf = async (req: Request, res: Response) => {
+  // if (!req.file) {
+  //   return res.status(400).json({ error: "No file uploaded" });
+  // }
+
   const file = req.file!;
 
-  const fileName = `${Date.now()}-${file.originalname}`;
-
-  const storagePath = `${file.filename}`;
+  const storagePath = `${Date.now()}-${file.originalname}`;
 
   try {
-    if (!req.file) {
+    if (!file) {
       return res.status(400).json({ error: "No file uploaded" });
     }
 
