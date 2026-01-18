@@ -23,7 +23,8 @@ model PdfDocument {
   originalName String
   storagePath  String
   createdAt    DateTime    @default(now())
-
+  parsedText   String?  
+  status       String
   userId       String?
   user         User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
 

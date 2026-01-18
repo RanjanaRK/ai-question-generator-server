@@ -26,16 +26,17 @@ export const uploadPdf = async (req: Request, res: Response) => {
       file.mimetype,
     );
 
+    //  parse pdf
+    const text = await pdfParsing(file.path);
+
     //  save metadata
     const pdf = await prisma.pdfDocument.create({
       data: {
         originalName: file.originalname,
         storagePath: storagePath,
+        status: "PARSED",
       },
     });
-
-    //  parse pdf
-    const text = await pdfParsing(file.path);
 
     // chunk text
 
