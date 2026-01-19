@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { mcqGenerate } from "../controllers/aiGenerateController";
+import { generateMcq } from "../controllers/aiGenerateController";
 
 const router = Router();
 
-router.post("/generate/mcq", mcqGenerate);
+router.post("/generate/mcq", generateMcq);
 
 export default router;
