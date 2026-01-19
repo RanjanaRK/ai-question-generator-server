@@ -28,18 +28,7 @@ model PdfDocument {
   userId       String?
   user         User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  chunks       PdfChunk[]
 
   @@index([userId])
 }
 
-model PdfChunk {
-  id        String      @id @default(uuid())
-  content   String
-  createdAt DateTime    @default(now())
-
-  pdfId     String
-  pdf       PdfDocument @relation(fields: [pdfId], references: [id], onDelete: Cascade)
-
-  @@index([pdfId])
-}
