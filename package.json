@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/RanjanaRK/ai-question-generator-server#readme",
   "dependencies": {
+    "@google/genai": "^1.37.0",
     "@prisma/client": "^6.19.2",
     "@supabase/supabase-js": "^2.90.1",
     "cors": "^2.8.5",
