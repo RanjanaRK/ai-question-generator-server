@@ -27,20 +27,20 @@ model PdfDocument {
   status       String
   userId       String?
   user         User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  mcqSets      McqSet[]
 
   @@index([userId])
 }
 
 
-model McqSet{
- id           String       @id @default(uuid())
- pdfId        String
- createdAt    DateTime     @default(now())
- pdf          PdfDocument  @relation(fields: [pdfId],references: [id])
- items        McqItem[]
-
+model McqSet {
+  id        String   @id @default(uuid())
+  pdfId     String
+  createdAt DateTime @default(now())
+  pdf       PdfDocument @relation(fields: [pdfId], references: [id])
+  items     McqItem[]
 }
+
 
 model McqItem {
   id            String @id @default(uuid())
@@ -51,5 +51,5 @@ model McqItem {
   optionC       String
   optionD       String
   correctOption String
-  mcqSet McqSet @relation(fields: [mcqSetId], references: [id])
+  mcqSet        McqSet @relation(fields: [mcqSetId], references: [id])
 }
