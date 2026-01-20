@@ -32,3 +32,24 @@ model PdfDocument {
   @@index([userId])
 }
 
+
+model McqSet{
+ id           String       @id @default(uuid())
+ pdfId        String
+ createdAt    DateTime     @default(now())
+ pdf          PdfDocument  @relation(fields: [pdfId],references: [id])
+ items        McqItem[]
+
+}
+
+model McqItem {
+  id            String @id @default(uuid())
+  mcqSetId      String
+  question      String
+  optionA       String
+  optionB       String
+  optionC       String
+  optionD       String
+  correctOption String
+  mcqSet McqSet @relation(fields: [mcqSetId], references: [id])
+}
