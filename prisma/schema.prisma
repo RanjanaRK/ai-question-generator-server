@@ -41,7 +41,6 @@ model McqSet {
   items     McqItem[]
 }
 
-
 model McqItem {
   id            String @id @default(uuid())
   mcqSetId      String
