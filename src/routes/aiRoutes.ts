@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { generateMcq } from "../controllers/aiGenerateController";
 
-const router = Router();
+const airouter = Router();
 
-router.post("/generate/mcq", generateMcq);
+airouter.post("/generate/mcq", generateMcq);
 
-export default router;
+export default airouter;

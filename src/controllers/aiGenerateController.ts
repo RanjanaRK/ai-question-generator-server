@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import { prisma } from "../lib/prisma";
-import { chunkText } from "../lib/chunkText";
 import { askGemini } from "../lib/askGemini";
+import { chunkText } from "../lib/chunkText";
+import { prisma } from "../lib/prisma";
+import { extractJson } from "../lib/extractedJson";
 
 type GeminiMcq = {
   question: string;
@@ -25,13 +26,13 @@ export const generateMcq = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Parsed text not found" });
     }
 
+    console.log(pdf.parsedText, ":parseeeeedddd text");
+
     const chunks = chunkText(pdf.parsedText);
     const context = chunks.slice(0, 5).join("\n");
 
     // generate questions
-    const questionPrompt = `You are an expert teacher.
-    
-    Generate excatly 20 important multiple choise questions from the given content .
+    const questionPrompt = `You are an expert teacher.Generate exactly 20 important multiple choice questions from the given content .
 
     Rules:
     - Each question must have 4 options (A, B, C, D)
@@ -39,7 +40,7 @@ export const generateMcq = async (req: Request, res: Response) => {
     - Return STRICT JSON only (no markdown, no explanation)
     
     JSON format: {
-    mcq:[{
+    mcqs:[{
       "question": "",
       "options": {
       "A": "",
@@ -57,20 +58,32 @@ export const generateMcq = async (req: Request, res: Response) => {
 
     const raw = await askGemini(questionPrompt);
 
+    const jsonText = extractJson(raw);
+
+    if (!jsonText) {
+      console.error("No JSON found in AI output:", raw);
+      return res.status(500).json({ error: "Invalid MCQ format from AI" });
+    }
+
     let parsed: { mcqs: GeminiMcq[] };
 
     try {
-      parsed = JSON.parse(raw);
+      parsed = JSON.parse(jsonText);
     } catch (err) {
       console.error("Gemini raw output:", raw);
       return res.status(500).json({ error: "Invalid MCQ format from AI" });
+    }
+
+    if (!parsed.mcqs || !Array.isArray(parsed.mcqs)) {
+      console.error("Parsed structure invalid:", parsed);
+      return res.status(500).json({ error: "Invalid MCQ structure from AI" });
     }
 
     const mcqs = parsed.mcqs.slice(0, 20);
 
     const mcqSet = await prisma.mcqSet.create({
       data: {
-        pdfId,
+        pdfId: pdfId,
       },
     });
 

@@ -2,7 +2,7 @@ import { ai } from "./gemini";
 
 export const askGemini = async (content: string): Promise<string> => {
   const response = await ai.models.generateContent({
-    model: "gemini-2.0-flash",
+    model: "gemini-2.5-flash",
     contents: content,
   });
   console.log(response.text);

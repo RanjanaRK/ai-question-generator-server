@@ -1,5 +1,4 @@
-
-  generator client {
+generator client {
   provider = "prisma-client-js"
 }
 
@@ -14,31 +13,29 @@ model User {
   email     String        @unique
   password  String
   createdAt DateTime      @default(now())
-
   pdfs      PdfDocument[]
 }
 
 model PdfDocument {
-  id           String      @id @default(uuid())
+  id           String   @id @default(uuid())
   originalName String
   storagePath  String
-  createdAt    DateTime    @default(now())
-  parsedText   String?  
-  status       String
+  createdAt    DateTime @default(now())
   userId       String?
-  user         User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parsedText   String?
+  status       String
   mcqSets      McqSet[]
+  user         User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
 
-
 model McqSet {
-  id        String   @id @default(uuid())
+  id        String      @id @default(uuid())
   pdfId     String
-  createdAt DateTime @default(now())
-  pdf       PdfDocument @relation(fields: [pdfId], references: [id])
+  createdAt DateTime    @default(now())
   items     McqItem[]
+  pdf       PdfDocument @relation(fields: [pdfId], references: [id])
 }
 
 model McqItem {

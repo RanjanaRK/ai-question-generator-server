@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
-import { uploadPdfStorage } from "../lib/storage";
-import { prisma } from "../lib/prisma";
 import { pdfParsing } from "../lib/pdfParsing";
-import { chunkText } from "../lib/chunkText";
+import { prisma } from "../lib/prisma";
+import { uploadPdfStorage } from "../lib/storage";
 
 export const uploadPdf = async (req: Request, res: Response) => {
   // if (!req.file) {
@@ -29,11 +28,14 @@ export const uploadPdf = async (req: Request, res: Response) => {
     //  parse pdf
     const text = await pdfParsing(file.path);
 
+    console.log(text, "textextract", file.path);
+
     //  save metadata
     const pdf = await prisma.pdfDocument.create({
       data: {
         originalName: file.originalname,
         storagePath: storagePath,
+        parsedText: text.text,
         status: "PARSED",
       },
     });
