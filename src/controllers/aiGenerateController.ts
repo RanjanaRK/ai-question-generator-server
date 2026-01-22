@@ -2,6 +2,17 @@ import { Request, Response } from "express";
 import { prisma } from "../lib/prisma";
 import { chunkText } from "../lib/chunkText";
 
+type GeminiMcq = {
+  question: string;
+  options: {
+    A: string;
+    B: string;
+    C: string;
+    D: string;
+  };
+  correctAnswer: "A" | "B" | "C" | "D";
+};
+
 export const generateMcq = async (req: Request, res: Response) => {
   try {
     const { pdfId } = req.body;
@@ -26,9 +37,6 @@ export const generateMcq = async (req: Request, res: Response) => {
     - Only ONE correct option
     - Return STRICT JSON only (no markdown, no explanation)
     
-
-
-   
     JSON format: {
     mcq:[{
       "question": "",
