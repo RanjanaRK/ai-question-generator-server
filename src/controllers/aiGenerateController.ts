@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { prisma } from "../lib/prisma";
 import { chunkText } from "../lib/chunkText";
+import { askGemini } from "../lib/askGemini";
 
 type GeminiMcq = {
   question: string;
@@ -53,5 +54,48 @@ export const generateMcq = async (req: Request, res: Response) => {
     CONTENT:${context}
 
     Difficulty level: medium.`;
-  } catch (error) {}
+
+    const raw = await askGemini(questionPrompt);
+
+    let parsed: { mcqs: GeminiMcq[] };
+
+    try {
+      parsed = JSON.parse(raw);
+    } catch (err) {
+      console.error("Gemini raw output:", raw);
+      return res.status(500).json({ error: "Invalid MCQ format from AI" });
+    }
+
+    const mcqs = parsed.mcqs.slice(0, 20);
+
+    const mcqSet = await prisma.mcqSet.create({
+      data: {
+        pdfId,
+      },
+    });
+
+    const mcqItems = await prisma.mcqItem.createMany({
+      data: mcqs.map((m) => ({
+        mcqSetId: mcqSet.id,
+        question: m.question,
+        optionA: m.options.A,
+        optionB: m.options.B,
+        optionC: m.options.C,
+        optionD: m.options.D,
+        correctOption: m.correctAnswer,
+      })),
+    });
+    // 7️⃣ response
+    res.json({
+      success: true,
+      mcqSetId: mcqSet.id,
+      total: mcqs.length,
+      mcqs,
+      mcqItems,
+      mcqSet,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to generate MCQs" });
+  }
 };
