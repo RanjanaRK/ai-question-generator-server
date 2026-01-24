@@ -15,6 +15,14 @@ type GeminiMcq = {
   correctAnswer: "A" | "B" | "C" | "D";
 };
 
+type GeminiResponse = {
+  mcqs?: GeminiMcq[];
+  questions?: GeminiMcq[];
+  data?: {
+    mcqs?: GeminiMcq[];
+  };
+};
+
 export const generateMcq = async (req: Request, res: Response) => {
   try {
     const { pdfId } = req.body;
@@ -26,8 +34,6 @@ export const generateMcq = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Parsed text not found" });
     }
 
-    console.log(pdf.parsedText, ":parseeeeedddd text");
-
     const chunks = chunkText(pdf.parsedText);
     const context = chunks.slice(0, 5).join("\n");
 
@@ -35,52 +41,78 @@ export const generateMcq = async (req: Request, res: Response) => {
     const questionPrompt = `You are an expert teacher.Generate exactly 20 important multiple choice questions from the given content .
 
     Rules:
-    - Each question must have 4 options (A, B, C, D)
-    - Only ONE correct option
-    - Return STRICT JSON only (no markdown, no explanation)
+    - Return ONLY valid JSON
+- Do NOT add explanation, markdown, or extra text
+- Top-level key MUST be "mcqs"
+- Each question must have exactly 4 options (A, B, C, D)
+- Only ONE correct option
     
-    JSON format: {
-    mcqs:[{
+    JSON FORMAT:
+{
+  "mcqs": [
+    {
       "question": "",
       "options": {
-      "A": "",
-      "B": "",
-      "C": "",
-      "D": ""
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
       },
       "correctAnswer": "A"
-    }]
     }
+  ]
+}
+CONTENT:
+${context}
 
-    CONTENT:${context}
-
-    Difficulty level: medium.`;
+Difficulty: Medium`;
 
     const raw = await askGemini(questionPrompt);
 
     const jsonText = extractJson(raw);
 
     if (!jsonText) {
-      console.error("No JSON found in AI output:", raw);
-      return res.status(500).json({ error: "Invalid MCQ format from AI" });
+      console.error("Gemini raw output:", raw);
+      return res.status(500).json({ error: "AI did not return valid JSON" });
     }
 
-    let parsed: { mcqs: GeminiMcq[] };
+    let parsed: GeminiResponse;
 
     try {
       parsed = JSON.parse(jsonText);
     } catch (err) {
-      console.error("Gemini raw output:", raw);
-      return res.status(500).json({ error: "Invalid MCQ format from AI" });
+      console.error("JSON parse error:", jsonText);
+      return res.status(500).json({ error: "Invalid JSON from AI" });
     }
 
-    if (!parsed.mcqs || !Array.isArray(parsed.mcqs)) {
-      console.error("Parsed structure invalid:", parsed);
+    //  Normalize MCQs
+    const mcqs = Array.isArray(parsed)
+      ? parsed
+      : parsed.mcqs || parsed.data?.mcqs || parsed.questions;
+
+    if (!Array.isArray(mcqs)) {
+      console.error("❌ Invalid AI structure:", parsed);
       return res.status(500).json({ error: "Invalid MCQ structure from AI" });
     }
 
-    const mcqs = parsed.mcqs.slice(0, 20);
+    // Validate MCQs
+    const validMcqs: GeminiMcq[] = mcqs.filter(
+      (m) =>
+        m.question &&
+        m.options?.A &&
+        m.options?.B &&
+        m.options?.C &&
+        m.options?.D &&
+        ["A", "B", "C", "D"].includes(m.correctAnswer),
+    );
 
+    if (validMcqs.length === 0) {
+      return res.status(500).json({ error: "No valid MCQs generated" });
+    }
+
+    const finalMcqs = validMcqs.slice(0, 20);
+
+    //  Save to DB
     const mcqSet = await prisma.mcqSet.create({
       data: {
         pdfId: pdfId,
@@ -88,7 +120,7 @@ export const generateMcq = async (req: Request, res: Response) => {
     });
 
     const mcqItems = await prisma.mcqItem.createMany({
-      data: mcqs.map((m) => ({
+      data: finalMcqs.map((m) => ({
         mcqSetId: mcqSet.id,
         question: m.question,
         optionA: m.options.A,
@@ -98,12 +130,17 @@ export const generateMcq = async (req: Request, res: Response) => {
         correctOption: m.correctAnswer,
       })),
     });
+
+    console.log("RAW GEMINI RESPONSE:", raw);
+    console.log("EXTRACTED JSON:", jsonText);
+    console.log("PARSED OBJECT:", parsed);
+
     // 7️⃣ response
     res.json({
       success: true,
       mcqSetId: mcqSet.id,
-      total: mcqs.length,
-      mcqs,
+      total: finalMcqs.length,
+      mcqs: finalMcqs,
       mcqItems,
       mcqSet,
     });
