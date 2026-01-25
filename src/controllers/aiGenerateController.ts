@@ -149,3 +149,8 @@ Difficulty: Medium`;
     res.status(500).json({ error: "Failed to generate MCQs" });
   }
 };
+
+export const generateQA = async (req: Request, res: Response) => {
+  try {
+  } catch (error) {}
+};
