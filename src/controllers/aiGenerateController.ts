@@ -203,7 +203,7 @@ Difficulty: Medium
       console.error("Gemini raw output:", raw);
       return res.status(500).json({ error: "AI did not return valid JSON" });
     }
-    let parsed: { qa?: { question: string; answer: string }[] };
+    let parsed: { qa?: [{ question: string; answer: string }] };
 
     try {
       parsed = JSON.parse(jsonText);
@@ -212,10 +212,14 @@ Difficulty: Medium
       return res.status(500).json({ error: "Invalid JSON from AI" });
     }
 
-    if (!Array.isArray(parsed.qa)) {
-      return res.status(500).json({ error: "Invalid QA structure" });
+    const qa = Array.isArray(parsed) ? parsed : parsed.qa;
+
+    if (!Array.isArray(qa)) {
+      console.error(" Invalid QA structure:", parsed);
+      return res.status(500).json({ error: "Invalid QA structure from AI" });
     }
-    const finalQa = parsed.qa.slice(0, 20);
+
+    const finalQa = qa.filter((q) => q.question && q.answer).slice(0, 20);
 
     res.json({
       success: true,
