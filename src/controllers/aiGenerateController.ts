@@ -152,5 +152,78 @@ Difficulty: Medium`;
 
 export const generateQA = async (req: Request, res: Response) => {
   try {
-  } catch (error) {}
+    const { pdfId } = req.body;
+
+    const pdf = await prisma.pdfDocument.findUnique({ where: { id: pdfId } });
+
+    if (!pdf || !pdf.parsedText) {
+      return res.status(400).json({ error: "Parsed text not found" });
+    }
+
+    const chunks = chunkText(pdf.parsedText);
+
+    const context = chunks.slice(0, 5).join("\n");
+
+    // generate questions
+    const questionPrompt = `You are an expert teacher.
+
+Generate exactly 20 important question and answer pairs from the given content.
+
+Rules:
+- Return ONLY valid JSON
+- Do NOT add explanation, markdown, or extra text
+- Top-level key MUST be "qa"
+- Each item must contain:
+  - "question"
+  - "answer"
+- Answers should be clear, correct, and based only on the given content
+
+JSON FORMAT:
+{
+  "qa": [
+    {
+      "question": "",
+      "answer": ""
+    }
+  ]
+}
+
+CONTENT:
+${context}
+
+Difficulty: Medium
+`;
+
+    // ask gemini
+    const raw = await askGemini(questionPrompt);
+
+    const jsonText = extractJson(raw);
+
+    if (!jsonText) {
+      console.error("Gemini raw output:", raw);
+      return res.status(500).json({ error: "AI did not return valid JSON" });
+    }
+    let parsed: { qa?: { question: string; answer: string }[] };
+
+    try {
+      parsed = JSON.parse(jsonText);
+    } catch (err) {
+      console.error("JSON parse error:", jsonText);
+      return res.status(500).json({ error: "Invalid JSON from AI" });
+    }
+
+    if (!Array.isArray(parsed.qa)) {
+      return res.status(500).json({ error: "Invalid QA structure" });
+    }
+    const finalQa = parsed.qa.slice(0, 20);
+
+    res.json({
+      success: true,
+      total: finalQa.length,
+      qa: finalQa,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to generate Q&A" });
+  }
 };
