@@ -4,10 +4,6 @@ import { prisma } from "../lib/prisma";
 import { uploadPdfStorage } from "../lib/storage";
 
 export const uploadPdf = async (req: Request, res: Response) => {
-  // if (!req.file) {
-  //   return res.status(400).json({ error: "No file uploaded" });
-  // }
-
   const file = req.file!;
 
   const storagePath = `${Date.now()}-${file.originalname}`;
