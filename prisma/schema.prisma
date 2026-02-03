@@ -25,6 +25,7 @@ model PdfDocument {
   parsedText   String?
   status       String
   mcqSets      McqSet[]
+  qaSets       QaSet[]
   user         User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
@@ -48,4 +49,27 @@ model McqItem {
   optionD       String
   correctOption String
   mcqSet        McqSet @relation(fields: [mcqSetId], references: [id])
+}
+
+
+model QaSet {
+  id        String      @id @default(uuid())
+  pdfId     String
+  createdAt DateTime    @default(now())
+  items     QaItem[]
+
+  pdf       PdfDocument @relation(fields: [pdfId], references: [id], onDelete: Cascade)
+
+  @@index([pdfId])
+}
+
+model QaItem {
+  id       String @id @default(uuid())
+  qaSetId String
+  question String
+  answer   String
+
+  qaSet    QaSet  @relation(fields: [qaSetId], references: [id], onDelete: Cascade)
+
+  @@index([qaSetId])
 }

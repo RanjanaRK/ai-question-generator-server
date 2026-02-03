@@ -221,6 +221,14 @@ Difficulty: Medium
 
     const finalQa = qa.filter((q) => q.question && q.answer).slice(0, 20);
 
+    //  Save to DB
+
+    //  ................................save to databse
+
+    console.log("RAW GEMINI RESPONSE:", raw);
+    console.log("EXTRACTED JSON:", jsonText);
+    console.log("PARSED OBJECT:", parsed);
+
     res.json({
       success: true,
       total: finalQa.length,
