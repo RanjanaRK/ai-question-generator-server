@@ -223,7 +223,20 @@ Difficulty: Medium
 
     //  Save to DB
 
-    //  ................................save to databse
+    const qaSet = await prisma.qaSet.create({
+      data: {
+        pdfId,
+        items: {
+          create: finalQa.map((qa) => ({
+            question: qa.question,
+            answer: qa.answer,
+          })),
+        },
+      },
+      include: {
+        items: true,
+      },
+    });
 
     console.log("RAW GEMINI RESPONSE:", raw);
     console.log("EXTRACTED JSON:", jsonText);
