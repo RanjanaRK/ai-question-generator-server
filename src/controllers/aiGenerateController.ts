@@ -38,7 +38,7 @@ export const generateMcq = async (req: Request, res: Response) => {
     const context = chunks.slice(0, 5).join("\n");
 
     // generate questions
-    const questionPrompt = `You are an expert teacher.Generate exactly 20 important multiple choice questions from the given content .
+    const questionPrompt = `You are an expert teacher.Generate exactly 5 important multiple choice questions from the given content .
 
     Rules:
     - Return ONLY valid JSON
@@ -110,7 +110,7 @@ Difficulty: Medium`;
       return res.status(500).json({ error: "No valid MCQs generated" });
     }
 
-    const finalMcqs = validMcqs.slice(0, 20);
+    const finalMcqs = validMcqs.slice(0, 5);
 
     //  Save to DB
     const mcqSet = await prisma.mcqSet.create({
@@ -167,7 +167,7 @@ export const generateQA = async (req: Request, res: Response) => {
     // generate questions
     const questionPrompt = `You are an expert teacher.
 
-Generate exactly 20 important question and answer pairs from the given content.
+Generate exactly 5 important question and answer pairs from the given content.
 
 Rules:
 - Return ONLY valid JSON
@@ -219,7 +219,7 @@ Difficulty: Medium
       return res.status(500).json({ error: "Invalid QA structure from AI" });
     }
 
-    const finalQa = qa.filter((q) => q.question && q.answer).slice(0, 20);
+    const finalQa = qa.filter((q) => q.question && q.answer).slice(0, 5);
 
     //  Save to DB
 
