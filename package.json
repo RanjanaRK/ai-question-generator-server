@@ -25,7 +25,9 @@
   "dependencies": {
     "@google/genai": "^1.37.0",
     "@prisma/client": "^6.19.2",
+    "@quixo3/prisma-session-store": "^3.1.19",
     "@supabase/supabase-js": "^2.90.1",
+    "@types/express-session": "^1.18.2",
     "argon2": "^0.44.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",

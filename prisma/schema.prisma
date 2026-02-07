@@ -22,6 +22,16 @@ model User {
   pdfs      PdfDocument[]
 }
 
+
+model Session {
+  id        String   @id  @default(uuid())
+  sid       String   @unique
+  data      String   
+  expiresAt DateTime
+
+   @@index([sid])
+}
+
 model PdfDocument {
   id           String   @id @default(uuid())
   originalName String
