@@ -5,9 +5,9 @@ import { requireAuth } from "../middlewares/requireAuth";
 
 const airouter = Router();
 
-airouter.post("/generate/mcq", generateMcq);
+airouter.post("/generate/mcq", requireAuth, generateMcq);
 
-airouter.post("/generate/qa", generateQA);
+airouter.post("/generate/qa", requireAuth, generateQA);
 
 airouter.get("/mcq/:pdfId", requireAuth, getMcqsByPdf);
 

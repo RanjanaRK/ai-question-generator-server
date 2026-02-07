@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import { askGemini } from "../lib/askGemini";
 import { chunkText } from "../lib/chunkText";
-import { prisma } from "../lib/prisma";
 import { extractJson } from "../lib/extractedJson";
+import { prisma } from "../lib/prisma";
+import { checkPlan } from "./service/checkPlan";
 
 type GeminiMcq = {
   question: string;
@@ -152,6 +153,19 @@ Difficulty: Medium`;
 
 export const generateQA = async (req: Request, res: Response) => {
   try {
+    const userId = req.session?.userId;
+    console.log(userId, "userId");
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    try {
+      await checkPlan(userId);
+    } catch (err: any) {
+      return res.status(403).json({ message: err.message });
+    }
+
     const { pdfId } = req.body;
 
     const pdf = await prisma.pdfDocument.findUnique({ where: { id: pdfId } });
