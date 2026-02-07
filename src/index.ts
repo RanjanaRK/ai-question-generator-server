@@ -5,14 +5,17 @@ import router from "./routes/pdfRoutes";
 import authRouter from "./routes/authRoute";
 import app from "./server";
 import airouter from "./routes/aiRoutes";
+import { sessionMiddleware } from "./config/session";
 
 // dotenv.config();
 
 app.use(cors());
 app.use(express.json());
 
-app.use("/api", router);
+app.use(sessionMiddleware);
+
 app.use("/api/auth", authRouter);
+app.use("/api", router);
 app.use("/api", airouter);
 
 app.listen(8000, () => {
