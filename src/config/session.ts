@@ -6,7 +6,7 @@ import { prisma } from "../lib/prisma";
 export const sessionMiddleware = session({
   secret: "abc",
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie: {
     httpOnly: true,
     secure: true,

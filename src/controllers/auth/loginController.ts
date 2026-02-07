@@ -27,17 +27,19 @@ export const login = async (req: Request, res: Response) => {
     if (!valid) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-    req.session.userId = user.id;
 
-    console.info(`User logged in: ${user.email} (ID: ${user.id})`);
+    req.session.regenerate(function (err) {
+      req.session.userId = user.id;
 
-    res.status(200).json({
-      message: "User logged in successfully",
-      user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-      },
+      console.info(`User logged in: ${user.email} (ID: ${user.id})`);
+      res.status(200).json({
+        message: "User logged in successfully",
+        user: {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+        },
+      });
     });
   } catch (error) {
     console.error(error);
