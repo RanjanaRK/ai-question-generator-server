@@ -19,6 +19,7 @@ model User {
   password  String
   plan      Plan          @default(FREE)
   createdAt DateTime      @default(now())
+  updateAt  DateTime      @default(now())
   pdfs      PdfDocument[]
 }
 

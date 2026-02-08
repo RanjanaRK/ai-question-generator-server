@@ -59,6 +59,7 @@ export const updateCurrentUser = async (req: Request, res: Response) => {
         name: true,
         email: true,
         plan: true,
+        updateAt: true,
       },
     });
     console.log(user);
@@ -69,5 +70,45 @@ export const updateCurrentUser = async (req: Request, res: Response) => {
     });
   } catch (error) {
     res.status(500).json({ message: "Failed to update user" });
+  }
+};
+
+export const updateUserPlan = async (req: Request, res: Response) => {
+  try {
+    const userId = req.session.userId;
+    const { plan } = req.body;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    if (!plan || !["FREE", "PRO"].includes(plan)) {
+      return res.status(401).json({ message: "Invalid Plan" });
+    }
+
+    const userPlan = await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        plan,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        plan: true,
+        updateAt: true,
+      },
+    });
+    console.log(userPlan);
+
+    res.json({
+      success: true,
+      message: `Your plan has been upgraded to ${plan}`
+      data: userPlan,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update Plan" });
   }
 };
