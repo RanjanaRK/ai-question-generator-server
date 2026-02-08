@@ -6,7 +6,7 @@ export const getCurrentUser = async (req: Request, res: Response) => {
     const userId = req.session.userId;
 
     if (!userId) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({ success: false, message: "Unauthorized" });
     }
 
     const user = await prisma.user.findUnique({
@@ -25,7 +25,9 @@ export const getCurrentUser = async (req: Request, res: Response) => {
     });
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
     }
 
     res.json({
@@ -34,7 +36,7 @@ export const getCurrentUser = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to fetch MCQs" });
+    res.status(500).json({ message: "Failed to fetch MCQs" });
   }
 };
 
@@ -44,7 +46,7 @@ export const updateCurrentUser = async (req: Request, res: Response) => {
     const { name } = req.body;
 
     if (!userId) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({ success: false, message: "Unauthorized" });
     }
 
     const user = await prisma.user.update({
@@ -62,13 +64,36 @@ export const updateCurrentUser = async (req: Request, res: Response) => {
         updateAt: true,
       },
     });
-    console.log(user);
 
     res.json({
       success: true,
-      message: `Your profile has been update`,
-
+      message: `Your profile has been updated`,
       data: user,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update user" });
+  }
+};
+
+export const deleteUserAccount = async (req: Request, res: Response) => {
+  try {
+    const userId = req.session.userId;
+
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Unauthorized" });
+    }
+
+    await prisma.user.delete({
+      where: {
+        id: userId,
+      },
+    });
+
+    req.session.destroy(() => {});
+
+    res.json({
+      success: true,
+      message: "Account deleted successfully",
     });
   } catch (error) {
     res.status(500).json({ message: "Failed to update user" });
@@ -81,11 +106,11 @@ export const updateUserPlan = async (req: Request, res: Response) => {
     const { plan } = req.body;
 
     if (!userId) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({ success: false, message: "Unauthorized" });
     }
 
     if (!plan || !["FREE", "PRO"].includes(plan)) {
-      return res.status(401).json({ message: "Invalid Plan" });
+      return res.status(401).json({ success: false, message: "Invalid Plan" });
     }
 
     const userPlan = await prisma.user.update({
@@ -103,7 +128,6 @@ export const updateUserPlan = async (req: Request, res: Response) => {
         updateAt: true,
       },
     });
-    console.log(userPlan);
 
     res.json({
       success: true,
