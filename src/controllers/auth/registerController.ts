@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { prisma } from "../../lib/prisma";
 import argon2 from "argon2";
 import { registerSchema } from "../../utils/schema";
+import { success } from "zod";
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -53,6 +54,7 @@ export const register = async (req: Request, res: Response) => {
     });
 
     res.status(201).json({
+      success: true,
       message: "User registered successfully",
       user: {
         id: user.id,

@@ -1,6 +1,6 @@
+import argon2 from "argon2";
 import { Request, Response } from "express";
 import { prisma } from "../../lib/prisma";
-import argon2 from "argon2";
 import { loginSchema } from "../../utils/schema";
 
 export const login = async (req: Request, res: Response) => {
@@ -33,6 +33,7 @@ export const login = async (req: Request, res: Response) => {
 
       console.info(`User logged in: ${user.email} (ID: ${user.id})`);
       res.status(200).json({
+        success: true,
         message: "User logged in successfully",
         user: {
           id: user.id,
