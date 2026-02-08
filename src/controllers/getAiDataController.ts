@@ -27,7 +27,7 @@ export const getMcqsByPdf = async (req: Request, res: Response) => {
 
 export const getQaByPdf = async (req: Request, res: Response) => {
   try {
-    const pdfId = req.query.pdfId as string;
+    const pdfId = req.params.pdfId as string;
 
     const qaSets = await prisma.qaSet.findMany({
       where: { pdfId },

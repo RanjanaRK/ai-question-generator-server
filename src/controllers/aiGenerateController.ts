@@ -3,27 +3,8 @@ import { askGemini } from "../lib/askGemini";
 import { chunkText } from "../lib/chunkText";
 import { extractJson } from "../lib/extractedJson";
 import { prisma } from "../lib/prisma";
-import { checkPlan } from "./service/checkPlan";
-
-type GeminiMcq = {
-  question: string;
-  options: {
-    A: string;
-    B: string;
-    C: string;
-    D: string;
-  };
-  correctAnswer: "A" | "B" | "C" | "D";
-};
-
-type GeminiResponse = {
-  mcqs?: GeminiMcq[];
-  questions?: GeminiMcq[];
-  data?: {
-    mcqs?: GeminiMcq[];
-  };
-};
-
+import { checkPlan } from "../service/checkPlan";
+import { GeminiMcq, GeminiResponse } from "../utils/types/types";
 export const generateMcq = async (req: Request, res: Response) => {
   try {
     const { pdfId } = req.body;
@@ -162,8 +143,8 @@ export const generateQA = async (req: Request, res: Response) => {
 
     try {
       await checkPlan(userId);
-    } catch (err: any) {
-      return res.status(403).json({ message: err.message });
+    } catch (error: any) {
+      return res.status(403).json({ message: error.message });
     }
 
     const { pdfId } = req.body;

@@ -1,4 +1,4 @@
-import { prisma } from "../../lib/prisma";
+import { prisma } from "../lib/prisma";
 
 export const checkPlan = async (userId: string) => {
   if (!userId) {

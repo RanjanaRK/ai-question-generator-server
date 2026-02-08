@@ -6,6 +6,7 @@ import authRouter from "./routes/authRoute";
 import app from "./server";
 import airouter from "./routes/aiRoutes";
 import { sessionMiddleware } from "./config/session";
+import userRouter from "./routes/userRoutes";
 
 // dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(sessionMiddleware);
 
 app.use("/api/auth", authRouter);
 app.use("/api", router);
+app.use("/api/user", userRouter);
 app.use("/api", airouter);
 
 app.listen(8000, () => {
