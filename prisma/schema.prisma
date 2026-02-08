@@ -54,7 +54,7 @@ model McqSet {
   createdAt DateTime    @default(now())
   expiresAt DateTime?
   items     McqItem[]
-  pdf       PdfDocument @relation(fields: [pdfId], references: [id])
+  pdf       PdfDocument @relation(fields: [pdfId], references: [id],onDelete: Cascade)
 }
 
 model McqItem {
@@ -66,7 +66,7 @@ model McqItem {
   optionC       String
   optionD       String
   correctOption String
-  mcqSet        McqSet @relation(fields: [mcqSetId], references: [id])
+  mcqSet        McqSet @relation(fields: [mcqSetId], references: [id],onDelete: Cascade)
 }
 
 
@@ -74,8 +74,8 @@ model QaSet {
   id        String      @id @default(uuid())
   pdfId     String
   createdAt DateTime    @default(now())
+  expiresAt DateTime?
   items     QaItem[]
-
   pdf       PdfDocument @relation(fields: [pdfId], references: [id], onDelete: Cascade)
 
   @@index([pdfId])
@@ -86,7 +86,6 @@ model QaItem {
   qaSetId String
   question String
   answer   String
-
   qaSet    QaSet  @relation(fields: [qaSetId], references: [id], onDelete: Cascade)
 
   @@index([qaSetId])
