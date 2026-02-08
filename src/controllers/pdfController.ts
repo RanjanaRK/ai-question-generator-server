@@ -6,6 +6,8 @@ import { uploadPdfStorage } from "../lib/storage";
 export const uploadPdf = async (req: Request, res: Response) => {
   const file = req.file!;
 
+  const userId = req.session!.userId;
+
   const storagePath = `${Date.now()}-${file.originalname}`;
 
   try {
@@ -33,11 +35,40 @@ export const uploadPdf = async (req: Request, res: Response) => {
         storagePath: storagePath,
         parsedText: text.text,
         status: "PARSED",
+        userId: userId,
       },
     });
 
     res.json({ success: true, pdfId: pdf.id, text });
   } catch (error) {
-    console.error(error);
+    res.status(500).json({ error: "Upload failed" });
+  }
+};
+
+export const getPdf = async (req: Request, res: Response) => {
+  try {
+    const userId = req.session!.userId;
+
+    const pdfId = req.params.pdfId as string;
+
+    const pdf = await prisma.pdfDocument.findFirst({
+      where: {
+        id: pdfId,
+        userId: userId,
+      },
+    });
+
+    if (!pdf) {
+      return res.status(404).json({
+        message: "PDF not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      data: pdf,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch PDF" });
   }
 };
