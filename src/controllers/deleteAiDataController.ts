@@ -1,15 +1,10 @@
 import { Request, Response } from "express";
 import { prisma } from "../lib/prisma";
+import { deleteExpiredMcqsService } from "../service/deleteExpiredMcqsService";
 
 export const deleteExpiresMcqs = async (req: Request, res: Response) => {
   try {
-    const result = await prisma.mcqSet.deleteMany({
-      where: {
-        expiresAt: {
-          lt: new Date(),
-        },
-      },
-    });
+    const result = await deleteExpiredMcqsService();
 
     res.json({
       success: true,

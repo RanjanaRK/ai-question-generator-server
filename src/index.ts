@@ -1,12 +1,13 @@
 import cors from "cors";
 import "dotenv/config";
 import express from "express";
-import router from "./routes/pdfRoutes";
-import authRouter from "./routes/authRoute";
-import app from "./server";
-import airouter from "./routes/aiRoutes";
 import { sessionMiddleware } from "./config/session";
+import airouter from "./routes/aiRoutes";
+import authRouter from "./routes/authRoute";
+import router from "./routes/pdfRoutes";
 import userRouter from "./routes/userRoutes";
+import app from "./server";
+import { dataCleanup } from "./service/dataCleanup";
 
 // dotenv.config();
 
@@ -22,4 +23,6 @@ app.use("/api", airouter);
 
 app.listen(8000, () => {
   console.log("server is running okay");
+
+  // dataCleanup.start();
 });
