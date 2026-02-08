@@ -52,6 +52,7 @@ model McqSet {
   id        String      @id @default(uuid())
   pdfId     String
   createdAt DateTime    @default(now())
+  expiresAt DateTime?
   items     McqItem[]
   pdf       PdfDocument @relation(fields: [pdfId], references: [id])
 }

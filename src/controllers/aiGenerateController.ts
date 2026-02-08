@@ -8,6 +8,22 @@ import { GeminiMcq, GeminiResponse } from "../utils/types/types";
 export const generateMcq = async (req: Request, res: Response) => {
   try {
     const { pdfId } = req.body;
+    const userId = req.session?.userId;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        plan: true,
+      },
+    });
+
+    const expiresAt =
+      user?.plan === "FREE"
+        ? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+        : null;
 
     const pdf = await prisma.pdfDocument.findUnique({
       where: { id: pdfId },
@@ -98,6 +114,7 @@ Difficulty: Medium`;
     const mcqSet = await prisma.mcqSet.create({
       data: {
         pdfId: pdfId,
+        expiresAt: expiresAt,
       },
     });
 
