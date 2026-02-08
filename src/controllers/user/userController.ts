@@ -66,6 +66,8 @@ export const updateCurrentUser = async (req: Request, res: Response) => {
 
     res.json({
       success: true,
+      message: `Your profile has been update`,
+
       data: user,
     });
   } catch (error) {
@@ -105,7 +107,7 @@ export const updateUserPlan = async (req: Request, res: Response) => {
 
     res.json({
       success: true,
-      message: `Your plan has been upgraded to ${plan}`
+      message: `Your plan has been upgraded to ${plan}`,
       data: userPlan,
     });
   } catch (error) {
