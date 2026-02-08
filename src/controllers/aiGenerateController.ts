@@ -10,9 +10,6 @@ export const generateMcq = async (req: Request, res: Response) => {
     const { pdfId } = req.body;
     const userId = req.session?.userId;
 
-    if (!userId) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: {

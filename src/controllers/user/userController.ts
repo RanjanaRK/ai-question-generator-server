@@ -5,10 +5,6 @@ export const getCurrentUser = async (req: Request, res: Response) => {
   try {
     const userId = req.session.userId;
 
-    if (!userId) {
-      return res.status(401).json({ success: false, message: "Unauthorized" });
-    }
-
     const user = await prisma.user.findUnique({
       where: {
         id: userId,
@@ -45,10 +41,6 @@ export const updateCurrentUser = async (req: Request, res: Response) => {
     const userId = req.session.userId;
     const { name } = req.body;
 
-    if (!userId) {
-      return res.status(401).json({ success: false, message: "Unauthorized" });
-    }
-
     const user = await prisma.user.update({
       where: {
         id: userId,
@@ -79,10 +71,6 @@ export const deleteUserAccount = async (req: Request, res: Response) => {
   try {
     const userId = req.session.userId;
 
-    if (!userId) {
-      return res.status(401).json({ success: false, message: "Unauthorized" });
-    }
-
     await prisma.user.delete({
       where: {
         id: userId,
@@ -104,10 +92,6 @@ export const updateUserPlan = async (req: Request, res: Response) => {
   try {
     const userId = req.session.userId;
     const { plan } = req.body;
-
-    if (!userId) {
-      return res.status(401).json({ success: false, message: "Unauthorized" });
-    }
 
     if (!plan || !["FREE", "PRO"].includes(plan)) {
       return res.status(401).json({ success: false, message: "Invalid Plan" });

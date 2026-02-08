@@ -6,10 +6,6 @@ export const getMcqsByPdf = async (req: Request, res: Response) => {
     const userId = req.session?.userId;
     const pdfId = req.params.pdfId as string;
 
-    if (!userId) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-
     if (!pdfId) {
       return res.status(400).json({ message: "pdfId is required" });
     }
@@ -48,10 +44,6 @@ export const getQaByPdf = async (req: Request, res: Response) => {
   try {
     const userId = req.session?.userId;
     const pdfId = req.params.pdfId as string;
-
-    if (!userId) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
 
     if (!pdfId) {
       return res.status(400).json({ message: "pdfId is required" });
