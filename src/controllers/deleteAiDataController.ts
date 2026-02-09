@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { prisma } from "../lib/prisma";
-import { deleteExpiredMcqsService } from "../service/deleteExpiredMcqsService";
+import { deleteExpiredMcqsService } from "../service/deleteExpiresService";
 
 export const deleteExpiresMcqs = async (req: Request, res: Response) => {
   try {
