@@ -9,3 +9,13 @@ export const deleteExpiredMcqsService = async () => {
     },
   });
 };
+
+export const deleteExpiredQaService = async () => {
+  return prisma.qaSet.deleteMany({
+    where: {
+      expiresAt: {
+        lt: new Date(),
+      },
+    },
+  });
+};
