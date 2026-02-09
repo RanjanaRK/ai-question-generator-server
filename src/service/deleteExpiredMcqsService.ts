@@ -19,3 +19,12 @@ export const deleteExpiredQaService = async () => {
     },
   });
 };
+export const deleteExpirePdfService = async () => {
+  return prisma.pdfDocument.deleteMany({
+    where: {
+      expiresAt: {
+        lt: new Date(),
+      },
+    },
+  });
+};
