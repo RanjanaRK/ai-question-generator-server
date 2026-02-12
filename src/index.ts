@@ -8,11 +8,13 @@ import authRouter from "./routes/authRoute";
 import router from "./routes/pdfRoutes";
 import userRouter from "./routes/userRoutes";
 import app from "./server";
+import cookieParser from "cookie-parser";
 
 // dotenv.config();
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 app.use(sessionMiddleware);
 
