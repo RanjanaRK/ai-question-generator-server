@@ -3,6 +3,7 @@ import cors from "cors";
 import "dotenv/config";
 import express from "express";
 import "./config/googleStrategy";
+import "./config/passport";
 import passport from "passport";
 import { sessionMiddleware } from "./config/session";
 import airouter from "./routes/aiRoutes";
