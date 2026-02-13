@@ -1,6 +1,8 @@
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import "dotenv/config";
 import express from "express";
+import "./config/googleStrategy";
 import passport from "passport";
 import { sessionMiddleware } from "./config/session";
 import airouter from "./routes/aiRoutes";
@@ -8,7 +10,6 @@ import authRouter from "./routes/authRoute";
 import router from "./routes/pdfRoutes";
 import userRouter from "./routes/userRoutes";
 import app from "./server";
-import cookieParser from "cookie-parser";
 
 // dotenv.config();
 
