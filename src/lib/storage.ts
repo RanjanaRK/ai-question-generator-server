@@ -5,7 +5,7 @@ export const uploadPdfStorage = async (
   pdfs: string,
   localFilePath: string,
   storagePath: string,
-  contentType: string
+  contentType: string,
 ) => {
   const fileBuffer = fs.readFileSync(localFilePath);
 
