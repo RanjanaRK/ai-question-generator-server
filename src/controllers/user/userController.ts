@@ -109,7 +109,7 @@ export const updateUserPlan = async (req: Request, res: Response) => {
         name: true,
         email: true,
         plan: true,
-        updateAt: true,
+        updatedAt: true,
       },
     });
 
