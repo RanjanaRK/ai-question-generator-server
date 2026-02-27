@@ -1,23 +1,22 @@
 import { supabase } from "./supabase";
-import fs from "fs";
 
 export const uploadPdfStorage = async (
   pdfs: string,
-  localFilePath: string,
+  fileBuffer: Buffer,
   storagePath: string,
   contentType: string,
 ) => {
-  const fileBuffer = fs.readFileSync(localFilePath);
+  const { data, error } = await supabase.storage
+    .from(pdfs)
+    .upload(storagePath, fileBuffer, {
+      contentType,
+      upsert: false,
+    });
 
-  try {
-    const { data, error } = await supabase.storage
-      .from(pdfs)
-      .upload(storagePath, fileBuffer, {
-        contentType,
-        upsert: false,
-      });
-    if (error) throw new Error(error.message);
+  if (error) {
+    console.error("SUPABASE ERROR:", error);
+    throw error;
+  }
 
-    return data;
-  } catch (error) {}
+  return data;
 };

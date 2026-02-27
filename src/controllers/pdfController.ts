@@ -4,9 +4,20 @@ import { prisma } from "../lib/prisma";
 import { uploadPdfStorage } from "../lib/storage";
 
 export const uploadPdf = async (req: Request, res: Response) => {
-  const file = req.file!;
+  const file = req.file;
 
-  const userId = req.session!.userId;
+  if (!file) {
+    return res.status(400).json({
+      error: "No file uploaded",
+    });
+  }
+  const userId = req.session?.userId;
+
+  if (!userId) {
+    return res.status(401).json({
+      error: "Unauthorized",
+    });
+  }
 
   const storagePath = `${Date.now()}-${file.originalname}`;
 
@@ -16,17 +27,19 @@ export const uploadPdf = async (req: Request, res: Response) => {
     }
 
     //  upload to storage
+
     const uploading = await uploadPdfStorage(
       "pdfs",
-      file.path,
+      file.buffer,
       storagePath,
       file.mimetype,
     );
 
+    // console.log("Upload success:", uploading);
     //  parse pdf
-    const text = await pdfParsing(file.path);
+    const text = await pdfParsing(file.buffer);
 
-    console.log(text, "textextract", file.path);
+    // console.log(text, "textextract", file.buffer);
 
     //  save metadata
     const pdf = await prisma.pdfDocument.create({
@@ -39,8 +52,9 @@ export const uploadPdf = async (req: Request, res: Response) => {
       },
     });
 
-    res.json({ success: true, pdfId: pdf.id, text });
+    res.json({ success: true, pdfId: pdf.id });
   } catch (error) {
+    console.error("UPLOAD ERROR:", error);
     res.status(500).json({ error: "Upload failed" });
   }
 };
