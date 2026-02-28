@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { pdfParsing } from "../lib/pdfParsing";
 import { prisma } from "../lib/prisma";
 import { uploadPdfStorage } from "../lib/storage";
+import { supabase } from "../lib/supabase";
 
 export const uploadPdf = async (req: Request, res: Response) => {
   const file = req.file;
@@ -78,11 +79,21 @@ export const getPdf = async (req: Request, res: Response) => {
       });
     }
 
+    // Generate signed URL
+    const { data } = await supabase.storage
+      .from("pdfs")
+      .createSignedUrl(pdf.storagePath, 3600);
+
     res.json({
       success: true,
-      data: pdf,
+      data: {
+        ...pdf,
+        signedUrl: data?.signedUrl,
+      },
     });
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch PDF" });
+    res.status(500).json({
+      message: "Failed to fetch PDF",
+    });
   }
 };
