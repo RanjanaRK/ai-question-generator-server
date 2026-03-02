@@ -15,6 +15,7 @@ export const getCurrentUser = async (req: Request, res: Response) => {
         name: true,
         email: true,
         plan: true,
+        role: true,
         createdAt: true,
         pdfs: true,
       },

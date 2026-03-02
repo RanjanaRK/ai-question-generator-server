@@ -97,3 +97,40 @@ export const getPdf = async (req: Request, res: Response) => {
     });
   }
 };
+export const deletePdf = async (req: Request, res: Response) => {
+  try {
+    const userId = req.session!.userId;
+
+    const pdfId = req.params.pdfId as string;
+
+    const pdf = await prisma.pdfDocument.findFirst({
+      where: {
+        id: pdfId,
+        userId: userId,
+      },
+    });
+
+    if (!pdf) {
+      return res.status(404).json({
+        message: "PDF not found",
+      });
+    }
+
+    await supabase.storage.from("pdfs").remove([pdf.storagePath]);
+
+    await prisma.pdfDocument.delete({
+      where: {
+        id: pdfId,
+      },
+    });
+
+    res.json({
+      success: true,
+      message: "PDF deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to delete PDF",
+    });
+  }
+};
