@@ -134,6 +134,7 @@ Difficulty: Medium`;
     // 7️⃣ response
     res.json({
       success: true,
+      message: "generated",
       mcqSetId: mcqSet.id,
       total: finalMcqs.length,
       mcqs: finalMcqs,
@@ -253,6 +254,7 @@ Difficulty: Medium
 
     res.json({
       success: true,
+      message: "generated",
       total: finalQa.length,
       qa: finalQa,
     });
