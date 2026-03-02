@@ -1,8 +1,7 @@
+import argon2 from "argon2";
 import { Request, Response } from "express";
 import { prisma } from "../../lib/prisma";
-import argon2 from "argon2";
 import { registerSchema } from "../../utils/schema";
-import { success } from "zod";
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -15,10 +14,7 @@ export const register = async (req: Request, res: Response) => {
       });
     }
 
-    const { name, email, password } = req.body;
-    if (!name || !email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
+    const { name, email, password } = parsed.data;
 
     const normalizedEmail = email.trim().toLowerCase();
 
@@ -32,6 +28,18 @@ export const register = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Email already exists" });
     }
 
+    const blacklistedUser = await prisma.blacklistedEmail.findUnique({
+      where: {
+        email: normalizedEmail,
+      },
+    });
+
+    if (blacklistedUser) {
+      return res.status(400).json({
+        message: "This email cannot be used",
+      });
+    }
+
     const hashedPassword = await argon2.hash(password, {
       type: argon2.argon2id,
       memoryCost: 19456,
@@ -43,7 +51,7 @@ export const register = async (req: Request, res: Response) => {
       data: {
         email: normalizedEmail,
         password: hashedPassword,
-        name: name,
+        name,
       },
       select: {
         id: true,
@@ -62,7 +70,13 @@ export const register = async (req: Request, res: Response) => {
         name: user.name,
       },
     });
-  } catch (error) {
+  } catch (error: any) {
+    if (error.code === "P2002") {
+      return res.status(400).json({
+        message: "Email already exists",
+      });
+    }
+
     console.error(error);
     res.status(500).json({
       message: "Something went wrong",
