@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { requireAuth } from "../middlewares/requireAuth";
 import {
+  deleteUserAccount,
   getCurrentUser,
   updateCurrentUser,
   updateUserPlan,
@@ -11,6 +12,8 @@ const userRouter = Router();
 userRouter.get("/me", requireAuth, getCurrentUser);
 
 userRouter.patch("/me", requireAuth, updateCurrentUser);
+
+userRouter.patch("/account", requireAuth, deleteUserAccount);
 
 userRouter.patch("/plan/upgrade", requireAuth, updateUserPlan);
 

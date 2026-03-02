@@ -72,6 +72,22 @@ export const deleteUserAccount = async (req: Request, res: Response) => {
   try {
     const userId = req.session.userId;
 
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    await prisma.blacklistedEmail.create({
+      data: {
+        email: user.email,
+      },
+    });
+
     await prisma.user.delete({
       where: {
         id: userId,

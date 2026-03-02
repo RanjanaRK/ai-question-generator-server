@@ -97,6 +97,7 @@ export const getPdf = async (req: Request, res: Response) => {
     });
   }
 };
+
 export const deletePdf = async (req: Request, res: Response) => {
   try {
     const userId = req.session!.userId;

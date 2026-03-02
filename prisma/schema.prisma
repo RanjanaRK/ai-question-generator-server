@@ -60,6 +60,13 @@ model OAuthAccount {
 } 
 
 
+
+model BlacklistedEmail{
+ id           String @id @default(uuid())
+ email     String   @unique
+ createdAt DateTime @default(now())
+}
+
 model PdfDocument {
   id           String   @id @default(uuid())
   originalName String
