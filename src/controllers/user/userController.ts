@@ -40,7 +40,7 @@ export const getCurrentUser = async (req: Request, res: Response) => {
 export const updateCurrentUser = async (req: Request, res: Response) => {
   try {
     const userId = req.session.userId;
-    const { name } = req.body;
+    const { name, email } = req.body;
 
     const user = await prisma.user.update({
       where: {
@@ -48,6 +48,7 @@ export const updateCurrentUser = async (req: Request, res: Response) => {
       },
       data: {
         name,
+        email,
       },
       select: {
         id: true,
