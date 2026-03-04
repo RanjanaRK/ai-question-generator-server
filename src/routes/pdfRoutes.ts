@@ -9,6 +9,6 @@ router.post("/upload", requireAuth, upload.single("file"), uploadPdf);
 
 router.get("/pdf/:pdfId", requireAuth, getPdf);
 
-router.get("/pdf/:pdfId", requireAuth, deletePdf);
+router.delete("/pdf/:pdfId", requireAuth, deletePdf);
 
 export default router;
