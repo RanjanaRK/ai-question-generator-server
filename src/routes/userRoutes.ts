@@ -13,7 +13,7 @@ userRouter.get("/me", requireAuth, getCurrentUser);
 
 userRouter.patch("/me", requireAuth, updateCurrentUser);
 
-userRouter.patch("/account", requireAuth, deleteUserAccount);
+userRouter.delete("/account", requireAuth, deleteUserAccount);
 
 userRouter.patch("/plan/upgrade", requireAuth, updateUserPlan);
 
