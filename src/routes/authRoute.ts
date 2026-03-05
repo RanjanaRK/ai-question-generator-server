@@ -17,9 +17,9 @@ authRouter.get(
 
 authRouter.get(
   "/google/callback",
-  passport.authenticate("google", { failureRedirect: "/login" }),
+  passport.authenticate("google", { failureRedirect: "/auth/login" }),
   (req, res) => {
-    res.send("OAuth success");
+    res.redirect("http://localhost:3000");
   },
 );
 
