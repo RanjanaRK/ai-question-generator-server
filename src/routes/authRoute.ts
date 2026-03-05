@@ -19,6 +19,8 @@ authRouter.get(
   "/google/callback",
   passport.authenticate("google", { failureRedirect: "/auth/login" }),
   (req, res) => {
+    (req.session as any).userId = (req.user as any).id;
+
     res.redirect("http://localhost:3000");
   },
 );
