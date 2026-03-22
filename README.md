@@ -33,11 +33,15 @@ Built with Node.js, Express, Prisma, and Google GenAI, this project enables inte
 - Storage: Supabase
 - Validation: Zod
 
+---
+
+## 📂 Project Structure
+
 ```ai-question-generator-server/
 │
 ├── prisma/              # Database schema & migrations
 ├── src/
-│   ├── config/          # App & DB configuration
+│   ├── config/          # Core configuration files
 │   ├── controllers/     # Route controllers
 │   │   ├── auth/
 │   │   └── user/
