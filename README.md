@@ -10,8 +10,8 @@ Built with Node.js, Express, Prisma, and Google GenAI, this project enables inte
 - 📄 Upload PDF files
 - 🧠 Extract text from PDFs
 - ❓ Generate:
-- MCQs (Multiple Choice Questions)
-- Q&A (Question & Answer pairs)
+  - MCQs (Multiple Choice Questions)
+  - Q&A (Question & Answer pairs)
 - 🔐 Authentication system (Email + Google OAuth)
 - ☁️ File storage using Supabase
 - 🗄️ Database management using Prisma
