@@ -24,7 +24,7 @@ Built with Node.js, Express, Prisma, and Google GenAI, this project enables inte
 
 - Backend: Node.js, Express
 - Language: TypeScript
-- Database: PostgreSQL / MySQL (via Prisma)
+- Database: PostgreSQL (via Prisma)
 - ORM: Prisma
 - Authentication: Passport.js (Google OAuth + Sessions)
 - AI Integration: Google Generative AI (@google/genai)
