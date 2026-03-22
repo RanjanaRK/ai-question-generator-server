@@ -17,3 +17,18 @@ Built with Node.js, Express, Prisma, and Google GenAI, this project enables inte
 - 🗄️ Database management using Prisma
 - 📦 Modular and scalable backend architecture
 - ⏱️ Background jobs using cron
+
+---
+
+## 🛠️ Tech Stack
+
+- Backend: Node.js, Express
+- Language: TypeScript
+- Database: PostgreSQL / MySQL (via Prisma)
+- ORM: Prisma
+- Authentication: Passport.js (Google OAuth + Sessions)
+- AI Integration: Google Generative AI (@google/genai)
+- File Upload: Multer
+- PDF Parsing: pdf-parse
+- Storage: Supabase
+- Validation: Zod
