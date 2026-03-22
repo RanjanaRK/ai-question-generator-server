@@ -32,3 +32,26 @@ Built with Node.js, Express, Prisma, and Google GenAI, this project enables inte
 - PDF Parsing: pdf-parse
 - Storage: Supabase
 - Validation: Zod
+
+```ai-question-generator-server/
+│
+├── prisma/              # Database schema & migrations
+├── src/
+│   ├── config/          # App & DB configuration
+│   ├── controllers/     # Route controllers
+│   │   ├── auth/
+│   │   └── user/
+│   │
+│   ├── routes/          # Express routes
+│   ├── middlewares/     # Auth & validation middleware
+│   ├── service/         # Business logic layer
+│   ├── lib/             # AI, PDF parsing, storage logic
+│   ├── utils/           # Helper functions
+│   │
+│   ├── index.ts         # Entry point
+│   └── server.ts        # Server config
+│
+├── uploads/             # Uploaded PDF files
+├── .env                 # Environment variables
+└── package.json
+```
