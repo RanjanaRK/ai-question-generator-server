@@ -59,3 +59,44 @@ Built with Node.js, Express, Prisma, and Google GenAI, this project enables inte
 ├── .env                 # Environment variables
 └── package.json
 ```
+
+## ⚙️ Installation & Setup
+
+### 1️⃣ Clone the Repositor
+
+git clone RanjanaRK/ai-question-generator-server
+
+### 2️⃣ Install Dependencies
+
+npm install
+
+###3️⃣ Setup Environment Variables
+
+Create a .env file in root:
+
+DATABASE_URL= YOUR_DATABASE_URL_HERE
+
+SUPABASE_URL= YOUR_SUPABASE_URL_HERE
+
+SUPABASE_SERVICE_ROLE_KEY= YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE
+
+SUPABASE_SECRET_KEY= YOUR_SUPABASE_SECRET_KEY_HERE
+
+PORT= YOUR_PORT_HERE
+
+GOOGLE_CLIENT_ID=**INSERT_CLIENT_ID_HERE**
+
+GOOGLE_CLIENT_SECRET=**INSERT_CLIENT_SECRET_HERE**
+
+### 4️⃣ Run Database Migration
+
+npm run db:deploy
+
+### 5️⃣ Run Development Server
+
+npm run dev
+
+### 6️⃣ Build & Start Production
+
+npm run build
+npm start
