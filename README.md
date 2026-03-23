@@ -100,3 +100,12 @@ npm run dev
 
 npm run build
 npm start
+
+---
+
+## 📌 API Features Overview
+
+### Upload PDF
+
+- Accepts PDF file
+- Extracts text using pdf-parse
