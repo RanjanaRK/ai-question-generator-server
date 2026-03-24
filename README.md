@@ -134,15 +134,189 @@ npm start
 }
 ```
 
-### 🧠 2. Generate AI Content
+### 🧠 2. Generate AI Content (MCQ & Q&A)
 
 After parsing, AI uses extracted text.
 
-➤ PDF → MCQ
-Input: Parsed PDF text
-Process: Sent to Google GenAI
-Output: Multiple-choice questions
-➤ PDF → Q&A
-Input: Parsed PDF text
-Process: AI generates structured answers
-Output: Question-answer pairs
+---
+
+```
+PDF (parsed text)
+↓
+Chunking (split text)
+↓
+Context Selection (top 5 chunks)
+↓
+Prompt Engineering
+↓
+Google GenAI (askGemini)
+↓
+Raw AI Response
+↓
+JSON Extraction
+↓
+Validation & Filtering
+↓
+Database Storage (Neon + Prisma)
+↓
+Final Response (MCQ / Q&A)
+```
+
+### ⚙️ Step-by-Step Processing
+
+1. **User Authentication**
+   - Extract `userId` from session
+   - Validate user access
+   - Check plan restrictions (FREE / PREMIUM)
+
+---
+
+2. **Fetch Parsed PDF**
+   - Retrieve PDF using `pdfId`
+   - Ensure `parsedText` exists
+
+---
+
+3. **Text Chunking**
+   - Large text is split using `chunkText()`
+   - First 5 chunks are selected as context
+
+---
+
+4. **AI Prompt Creation**
+   - Structured prompt is created with rules:
+     - Strict JSON format
+     - No extra text
+     - Fixed number of questions (5)
+     - Controlled difficulty (Medium)
+
+---
+
+5. **Call AI (Google GenAI)**
+   - Send prompt using `askGemini()`
+   - Receive raw AI response
+
+---
+
+6. **Extract & Parse JSON**
+   - Extract JSON using `extractJson()`
+   - Parse response safely using `JSON.parse()`
+   - Handle invalid AI outputs
+
+---
+
+7. **Validate AI Output**
+
+#### ✅ MCQ Validation:
+
+- Must contain:
+  - `question`
+  - 4 options (A, B, C, D)
+  - Correct answer (A/B/C/D)
+
+#### ✅ Q&A Validation:
+
+- Must contain:
+  - `question`
+  - `answer`
+
+---
+
+8. **Normalize Data**
+
+- Handle different AI response formats:
+  - `mcqs`
+  - `data.mcqs`
+  - `questions`
+
+---
+
+9. **Limit Results**
+
+- Only first 5 valid items are used
+
+---
+
+10. **Store in Database (Neon via Prisma)**
+
+#### 📘 MCQ:
+
+- Create `mcqSet`
+- Store multiple `mcqItem`
+
+#### 📗 Q&A:
+
+- Create `qaSet`
+- Store related items
+
+---
+
+11. **Response to Client**
+
+Returns:
+
+- Generated MCQs or Q&A
+- Total count
+- Database IDs
+
+---
+
+### 🗑️ 3. Delete AI Data
+
+## Endpoint: DELETE /api/data/:id
+
+### 📥 4. Get Generated Data
+
+Endpoint: GET /api/data
+
+## 📡 API Endpoints
+
+### 🔐 Auth Routes (`/auth`)
+
+```
+| Method | Endpoint | Description |
+|--------|--------|------------|
+| POST | /auth/register | Register user |
+| POST | /auth/login | Login |
+| POST | /auth/logout | Logout |
+| GET | /auth/google | Google OAuth |
+| GET | /auth/google/callback | OAuth callback |
+```
+
+---
+
+### 📄 PDF Routes (`/api`)
+
+```
+| Method | Endpoint | Description |
+|--------|--------|------------|
+| POST | /api/upload | Upload PDF |
+| GET | /api/pdf/:pdfId | Get PDF |
+| DELETE | /api/pdf/:pdfId | Delete PDF |
+```
+
+---
+
+### 🧠 AI Routes (`/ai`)
+
+```
+| Method | Endpoint | Description |
+|--------|--------|------------|
+| POST | /ai/generate/mcq | Generate MCQs |
+| POST | /ai/generate/qa | Generate Q&A |
+| GET | /ai/mcq/:pdfId | Get MCQs |
+| GET | /ai/qa/:pdfId | Get Q&A |
+```
+
+---
+
+### 👤 User Routes (`/user`)
+
+```
+| Method | Endpoint | Description |
+|--------|--------|------------|
+| GET | /user/me | Current user |
+| PATCH | /user/me | Update profile |
+| DELETE | /user/account | Delete account |
+| PATCH | /user/plan/upgrade | Upgrade plan |
+```
