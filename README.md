@@ -105,7 +105,44 @@ npm start
 
 ## 📌 API Features Overview
 
-### Upload PDF
+### 📄 1. Upload PDF (Main Flow)
 
-- Accepts PDF file
-- Extracts text using pdf-parse
+**Flow:**
+
+1. User uploads PDF
+2. File stored in Supabase Storage
+3. PDF parsed using `pdf-parse`
+4. Extracted text saved in database
+5. Returns `pdfId`
+
+---
+
+### ⚙️ Internal Processing
+
+- Upload handled by **Multer**
+- File uploaded to **Supabase bucket (`pdfs`)**
+- Text extracted from `file.buffer`
+- Data stored in database (Neon via Prisma):
+
+```ts
+{
+  originalName: string,
+  storagePath: string,
+  parsedText: string,
+  status: "PARSED",
+  userId: string
+}
+```
+
+### 🧠 2. Generate AI Content
+
+After parsing, AI uses extracted text.
+
+➤ PDF → MCQ
+Input: Parsed PDF text
+Process: Sent to Google GenAI
+Output: Multiple-choice questions
+➤ PDF → Q&A
+Input: Parsed PDF text
+Process: AI generates structured answers
+Output: Question-answer pairs
