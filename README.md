@@ -105,13 +105,13 @@ npm start
 
 ## 📌 API Features Overview
 
-### 🔐 Authentication
+### 🔐1. Authentication
 
 Email & Password login (with Argon2 hashing)
 Google OAuth login using Passport.js
 Session-based authentication with Prisma session store
 
-### 📄 1. Upload PDF (Main Flow)
+### 📄 2. Upload PDF (Main Flow)
 
 **Flow:**
 
@@ -142,7 +142,7 @@ Session-based authentication with Prisma session store
 
 ---
 
-### 🧠 2. Generate AI Content (MCQ & Q&A)
+### 🧠 3. Generate AI Content (MCQ & Q&A)
 
 After parsing, AI uses extracted text.
 
@@ -248,14 +248,6 @@ Returns:
 - Database IDs
 
 ---
-
-### 🗑️ 3. Delete AI Data
-
-## Endpoint: DELETE /api/data/:id
-
-### 📥 4. Get Generated Data
-
-Endpoint: GET /api/data
 
 ## 📡 API Endpoints
 
