@@ -105,6 +105,12 @@ npm start
 
 ## 📌 API Features Overview
 
+### 🔐 Authentication
+
+Email & Password login (with Argon2 hashing)
+Google OAuth login using Passport.js
+Session-based authentication with Prisma session store
+
 ### 📄 1. Upload PDF (Main Flow)
 
 **Flow:**
@@ -133,6 +139,8 @@ npm start
   userId: string
 }
 ```
+
+---
 
 ### 🧠 2. Generate AI Content (MCQ & Q&A)
 
@@ -169,19 +177,13 @@ Final Response (MCQ / Q&A)
    - Validate user access
    - Check plan restrictions (FREE / PREMIUM)
 
----
-
 2. **Fetch Parsed PDF**
    - Retrieve PDF using `pdfId`
    - Ensure `parsedText` exists
 
----
-
 3. **Text Chunking**
    - Large text is split using `chunkText()`
    - First 5 chunks are selected as context
-
----
 
 4. **AI Prompt Creation**
    - Structured prompt is created with rules:
@@ -190,20 +192,14 @@ Final Response (MCQ / Q&A)
      - Fixed number of questions (5)
      - Controlled difficulty (Medium)
 
----
-
 5. **Call AI (Google GenAI)**
    - Send prompt using `askGemini()`
    - Receive raw AI response
-
----
 
 6. **Extract & Parse JSON**
    - Extract JSON using `extractJson()`
    - Parse response safely using `JSON.parse()`
    - Handle invalid AI outputs
-
----
 
 7. **Validate AI Output**
 
@@ -220,8 +216,6 @@ Final Response (MCQ / Q&A)
   - `question`
   - `answer`
 
----
-
 8. **Normalize Data**
 
 - Handle different AI response formats:
@@ -229,13 +223,9 @@ Final Response (MCQ / Q&A)
   - `data.mcqs`
   - `questions`
 
----
-
 9. **Limit Results**
 
 - Only first 5 valid items are used
-
----
 
 10. **Store in Database (Neon via Prisma)**
 
@@ -248,8 +238,6 @@ Final Response (MCQ / Q&A)
 
 - Create `qaSet`
 - Store related items
-
----
 
 11. **Response to Client**
 
@@ -271,7 +259,7 @@ Endpoint: GET /api/data
 
 ## 📡 API Endpoints
 
-### 🔐 Auth Routes (`/auth`)
+### 🔐 Auth Routes (`/api/auth`)
 
 ```
 | Method | Endpoint | Description |
@@ -320,3 +308,26 @@ Endpoint: GET /api/data
 | DELETE | /user/account | Delete account |
 | PATCH | /user/plan/upgrade | Upgrade plan |
 ```
+
+---
+
+# 📦 Scripts
+
+"dev": "tsx watch src/index.ts",
+"build": "tsc",
+"start": "node dist/index.js",
+"db:deploy": "prisma migrate deploy && prisma generate"
+
+---
+
+# 👨‍💻 Author
+
+## Developed by RanjanaRK
+
+# ⭐ Support
+
+## If you like this project, give it a ⭐ on GitHub!
+
+# 📄 License
+
+This project is licensed under the ISC License.
