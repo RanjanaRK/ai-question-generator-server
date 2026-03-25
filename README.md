@@ -277,7 +277,7 @@ Returns:
 
 ---
 
-### 🧠 AI Routes (`/ai`)
+### 🧠 AI Routes (`/api/ai`)
 
 ```
 | Method | Endpoint | Description |
@@ -290,7 +290,7 @@ Returns:
 
 ---
 
-### 👤 User Routes (`/user`)
+### 👤 User Routes (`/api/user`)
 
 ```
 | Method | Endpoint | Description |
@@ -303,23 +303,21 @@ Returns:
 
 ---
 
-# 📦 Scripts
+## 🌐 Frontend Repository
 
-"dev": "tsx watch src/index.ts",
-"build": "tsc",
-"start": "node dist/index.js",
-"db:deploy": "prisma migrate deploy && prisma generate"
+https://github.com/RanjanaRK/ai-question-generator-client.git
 
 ---
 
-# 👨‍💻 Author
+## 👨‍💻 Author
 
-## Developed by RanjanaRK
+**Ranjana Kumari**  
+Full-Stack Developer (Next.js · Node.js · MongoDB · Express)
 
-# ⭐ Support
+🔗 LinkedIn: https://www.linkedin.com/in/ranjanark/
 
-## If you like this project, give it a ⭐ on GitHub!
+🐙 GitHub: https://github.com/RanjanaRK
 
-# 📄 License
+## 📄 License
 
-This project is licensed under the ISC License.
+This project is licensed under the **MIT License**.
