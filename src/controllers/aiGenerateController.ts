@@ -19,7 +19,7 @@ export const generateMcq = async (req: Request, res: Response) => {
 
     const expiresAt =
       user?.plan === "FREE"
-        ? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+        ? new Date(Date.now() + 28 * 24 * 60 * 60 * 1000)
         : null;
 
     const pdf = await prisma.pdfDocument.findUnique({
