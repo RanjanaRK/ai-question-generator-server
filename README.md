@@ -112,20 +112,20 @@ npm install
 
 #### Create a .env file in root:
 
-DATABASE_URL= YOUR_DATABASE_URL_HERE
+DATABASE_URL=your_database_url_here
 
-SUPABASE_URL= YOUR_SUPABASE_URL_HERE
-SUPABASE_SERVICE_ROLE_KEY= YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE
-SUPABASE_SECRET_KEY= YOUR_SUPABASE_SECRET_KEY_HERE
+SUPABASE_URL=your_supabase_url_here
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key_here
+SUPABASE_SECRET_KEY=your_supabase_secret_key_here
 
-PORT= YOUR_PORT_HERE
+PORT=your_port_here
 
-GOOGLE_CLIENT_ID=**INSERT_CLIENT_ID_HERE**
-GOOGLE_CLIENT_SECRET=**INSERT_CLIENT_SECRET_HERE**
+GOOGLE_CLIENT_ID=your_google_client_id_here
+GOOGLE_CLIENT_SECRET=your_google_client_secret_here
 
-REDIS_HOST=REDIS_HOST_HERE
-REDIS_PORT=REDIS_PORT_HERE
-REDIS_PASSWORD= REDIS_PASSWORD_HERE
+REDIS_HOST=your_redis_host_here
+REDIS_PORT=your_redis_port_here
+REDIS_PASSWORD=your_redis_password_here
 
 ### 4️⃣ Run Database Migration
 
