@@ -17,7 +17,15 @@ export const getCurrentUser = async (req: Request, res: Response) => {
         plan: true,
         role: true,
         createdAt: true,
-        pdfs: true,
+        pdfs: {
+          orderBy: {
+            createdAt: "desc",
+          },
+          select: {
+            mcqSets: true,
+            qaSets: true,
+          },
+        },
       },
     });
 
