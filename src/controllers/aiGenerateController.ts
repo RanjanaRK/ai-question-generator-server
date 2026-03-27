@@ -5,6 +5,7 @@ import { extractJson } from "../lib/extractedJson";
 import { prisma } from "../lib/prisma";
 import { checkPlan } from "../service/checkPlan";
 import { GeminiMcq, GeminiResponse } from "../utils/types/types";
+import { rateLimiter } from "../lib/rateLimiter";
 export const generateMcq = async (req: Request, res: Response) => {
   try {
     const { pdfId } = req.body;
@@ -16,6 +17,22 @@ export const generateMcq = async (req: Request, res: Response) => {
         plan: true,
       },
     });
+
+    const isPro = user?.plan === "PRO";
+
+    if (!isPro) {
+      try {
+        await rateLimiter({
+          key: `mcq:${userId}`,
+          maxRequests: 5,
+          windowMs: 86400 * 1000,
+        });
+      } catch (err) {
+        return res.status(429).json({
+          message: "Daily MCQ limit reached. Upgrade to PRO 🚀",
+        });
+      }
+    }
 
     const expiresAt =
       user?.plan === "FREE"
