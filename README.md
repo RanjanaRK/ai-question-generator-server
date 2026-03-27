@@ -1,6 +1,7 @@
 # AI Question Generator (AskPDF)
 
 An AI-powered backend service that converts PDFs into MCQs (Multiple Choice Questions) and Q&A pairs using advanced AI models.
+
 Built with Node.js, Express, Prisma, and Google GenAI, this project enables intelligent document understanding and automated question generation.
 
 ---
@@ -13,56 +14,93 @@ Built with Node.js, Express, Prisma, and Google GenAI, this project enables inte
   - MCQs (Multiple Choice Questions)
   - Q&A (Question & Answer pairs)
 - 🔐 Authentication system (Email + Google OAuth)
+- ⚡ Rate limiting using Redis (FREE vs PRO plans)
+- 💾 Caching support for optimized performance
+- 🧹 Automated cleanup of expired data (cron jobs)
 - ☁️ File storage using Supabase
 - 🗄️ Database management using Prisma
 - 📦 Modular and scalable backend architecture
-- ⏱️ Background jobs using cron
 
 ---
 
 ## 🛠️ Tech Stack
 
-- Backend: Node.js, Express
-- Language: TypeScript
-- Database: PostgreSQL (via Prisma)
-- ORM: Prisma
-- Authentication: Passport.js (Google OAuth + Sessions)
-- AI Integration: Google Generative AI (@google/genai)
-- File Upload: Multer
-- PDF Parsing: pdf-parse
-- Storage: Supabase
-- Validation: Zod
+- **Backend:** Node.js, Express
+- **Language:** TypeScript
+- **Database:** PostgreSQL (via Prisma)
+- **ORM:** Prisma
+- **Cache & Rate Limiting:** Redis
+- **Authentication:** Passport.js (Google OAuth + Sessions)
+- **AI Integration:** Google Generative AI (@google/genai)
+- **File Upload:** Multer
+- **PDF Parsing:** pdf-parse
+- **Storage:** Supabase
+- **Validation:** Zod
+
+---
+
+## ⚡ Rate Limiting (Redis)
+
+To prevent abuse and control API usage, Redis is used for rate limiting.
+
+### 🧠 How it works
+
+- Each request increments a counter in Redis
+- Counters automatically expire after a time window
+- Requests are blocked when limit is exceeded
+
+### 📊 Limits
+
+```
+| Plan | MCQ Generation Limit  |
+| ---- | --------------------- |
+| FREE | 5 per day             |
+| PRO  | Higher / configurable |
+```
+
+### Example
+
+```ts
+await rateLimiter({
+  key: `mcq:${userId}`,
+  maxRequests: 5,
+  windowMs: 86400000, // 1 day
+});
+```
 
 ---
 
 ## 📂 Project Structure
 
-```ai-question-generator-server/
+```
+ai-question-generator-server/
 │
-├── prisma/              # Database schema & migrations
+├── prisma/ # Database schema & migrations
 ├── src/
-│   ├── config/          # Core configuration files
-│   ├── controllers/     # Route controllers
-│   │   ├── auth/
-│   │   └── user/
-│   │
-│   ├── routes/          # Express routes
-│   ├── middlewares/     # Auth & validation middleware
-│   ├── service/         # Business logic layer
-│   ├── lib/             # AI, PDF parsing, storage logic
-│   ├── utils/           # Helper functions
-│   │
-│   ├── index.ts         # Entry point
-│   └── server.ts        # Server config
+│ ├── config/ # Core configuration files
+│ ├── controllers/ # Route controllers
+│ │ ├── auth/
+│ │ └── user/
+│ │
+│ ├── routes/ # Express routes
+│ ├── middlewares/ # Auth & validation middleware
+│ ├── service/ # Business logic layer
+│ ├── lib/ # AI, PDF parsing, storage logic
+│ ├── utils/ # Helper functions
+│ │
+│ ├── index.ts # Entry point
+│ └── server.ts # Server config
 │
-├── uploads/             # Uploaded PDF files
-├── .env                 # Environment variables
+├── uploads/ # Uploaded PDF files
+├── .env # Environment variables
 └── package.json
 ```
 
+---
+
 ## ⚙️ Installation & Setup
 
-### 1️⃣ Clone the Repositor
+### 1️⃣ Clone the Repository
 
 git clone RanjanaRK/ai-question-generator-server
 
@@ -70,23 +108,24 @@ git clone RanjanaRK/ai-question-generator-server
 
 npm install
 
-###3️⃣ Setup Environment Variables
+### 3️⃣ Setup Environment Variables
 
-Create a .env file in root:
+#### Create a .env file in root:
 
 DATABASE_URL= YOUR_DATABASE_URL_HERE
 
 SUPABASE_URL= YOUR_SUPABASE_URL_HERE
-
 SUPABASE_SERVICE_ROLE_KEY= YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE
-
 SUPABASE_SECRET_KEY= YOUR_SUPABASE_SECRET_KEY_HERE
 
 PORT= YOUR_PORT_HERE
 
 GOOGLE_CLIENT_ID=**INSERT_CLIENT_ID_HERE**
-
 GOOGLE_CLIENT_SECRET=**INSERT_CLIENT_SECRET_HERE**
+
+REDIS_HOST=REDIS_HOST_HERE
+REDIS_PORT=REDIS_PORT_HERE
+REDIS_PASSWORD= REDIS_PASSWORD_HERE
 
 ### 4️⃣ Run Database Migration
 
@@ -105,11 +144,11 @@ npm start
 
 ## 📌 API Features Overview
 
-### 🔐1. Authentication
+### 🔐 1. Authentication
 
-Email & Password login (with Argon2 hashing)
-Google OAuth login using Passport.js
-Session-based authentication with Prisma session store
+- Email & Password login (with Argon2 hashing)
+- Google OAuth login using Passport.js
+- Session-based authentication with Prisma session store
 
 ### 📄 2. Upload PDF (Main Flow)
 
@@ -249,6 +288,18 @@ Returns:
 
 ---
 
+### 🧹 4. Cron Job (Cleanup System)
+
+Expired MCQs are automatically deleted using scheduled jobs.
+
+Behavior:
+
+- MCQs expire after 28 days (FREE users)
+- Cleanup runs every 7 days
+- Deletes only expired records
+
+---
+
 ## 📡 API Endpoints
 
 ### 🔐 Auth Routes (`/api/auth`)
@@ -311,7 +362,7 @@ https://github.com/RanjanaRK/ai-question-generator-client.git
 
 ## 👨‍💻 Author
 
-**Ranjana Kumari**  
+**Ranjana Kumari**
 Full-Stack Developer (Next.js · Node.js · MongoDB · Express)
 
 🔗 LinkedIn: https://www.linkedin.com/in/ranjanark/
