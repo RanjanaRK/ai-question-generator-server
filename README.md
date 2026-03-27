@@ -1,4 +1,4 @@
-# AI Question Generator (AskPDF)
+# AI Question Generator (AskPDFAI)
 
 An AI-powered backend service that converts PDFs into MCQs (Multiple Choice Questions) and Q&A pairs using advanced AI models.
 
