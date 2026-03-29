@@ -167,7 +167,7 @@ Difficulty: Medium`;
 export const generateQA = async (req: Request, res: Response) => {
   try {
     const userId = req.session?.userId;
-    console.log(userId, "userId");
+    // console.log(userId, "userId");
 
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized" });
