@@ -20,7 +20,7 @@ app.use(
     credentials: true,
     origin: [
       "http://localhost:3000",
-      "https://ai-question-generator-client.vercel.app",
+      "https://ai-question-generator-client-zw4z.vercel.app",
     ],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   }),
