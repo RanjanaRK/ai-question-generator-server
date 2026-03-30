@@ -1,13 +1,10 @@
 import argon2 from "argon2";
 import { Request, Response } from "express";
 import { prisma } from "../../lib/prisma";
-import { registerSchema } from "../../utils/schema";
 
 export const register = async (req: Request, res: Response) => {
   try {
     const { name, email, password } = req.body;
-
-    console.log("BODY:", req.body);
 
     const normalizedEmail = email.trim().toLowerCase();
 

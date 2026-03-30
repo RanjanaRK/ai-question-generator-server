@@ -1,13 +1,10 @@
 import argon2 from "argon2";
 import { Request, Response } from "express";
 import { prisma } from "../../lib/prisma";
-import { loginSchema } from "../../utils/schema";
 
 export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
-
-    console.log("BODY:", req.body);
 
     const user = await prisma.user.findUnique({
       where: { email },

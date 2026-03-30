@@ -15,6 +15,8 @@ import { dataCleanup } from "./service/dataCleanup";
 
 // dotenv.config();
 
+app.set("trust proxy", 1);
+
 app.use(
   cors({
     credentials: true,
