@@ -6,6 +6,8 @@ export const sessionMiddleware = session({
   secret: "U7j32fNgvsmFK0ti8kECYlzWfJ22nd8v",
   resave: false,
   saveUninitialized: false,
+  proxy: true,
+
   cookie: {
     httpOnly: true,
     secure: true,
