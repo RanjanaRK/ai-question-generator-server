@@ -16,6 +16,8 @@ export const register = async (req: Request, res: Response) => {
 
     const { name, email, password } = parsed.data;
 
+    console.log("BODY:", req.body);
+
     const normalizedEmail = email.trim().toLowerCase();
 
     const existingUser = await prisma.user.findUnique({
