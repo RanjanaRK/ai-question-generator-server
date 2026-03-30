@@ -3,7 +3,7 @@ import session from "express-session";
 import { prisma } from "../lib/prisma";
 
 export const sessionMiddleware = session({
-  secret: "U7j32fNgvsmFK0ti8kECYlzWfJ22nd8v",
+  secret: process.env.SESSION_SECRET || "default_secret",
   resave: false,
   saveUninitialized: false,
   proxy: true,

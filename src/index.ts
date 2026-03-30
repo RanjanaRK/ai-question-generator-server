@@ -20,10 +20,7 @@ app.set("trust proxy", 1);
 app.use(
   cors({
     credentials: true,
-    origin: [
-      "http://localhost:3000",
-      "https://ai-question-generator-client-zw4z.vercel.app",
-    ],
+    origin: ["http://localhost:3000", `${process.env.FRONTEND_URL}`],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   }),
 );

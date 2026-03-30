@@ -21,7 +21,7 @@ authRouter.get(
   (req, res) => {
     (req.session as any).userId = (req.user as any).id;
 
-    res.redirect("http://localhost:3000");
+    res.redirect(process.env.FRONTEND_URL || "http://localhost:3000");
   },
 );
 
