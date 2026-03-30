@@ -17,7 +17,9 @@ authRouter.get(
 
 authRouter.get(
   "/google/callback",
-  passport.authenticate("google", { failureRedirect: "/auth/login" }),
+  passport.authenticate("google", {
+    failureRedirect: `${process.env.FRONTEND_URL}/auth/login`,
+  }),
   (req, res) => {
     (req.session as any).userId = (req.user as any).id;
 
