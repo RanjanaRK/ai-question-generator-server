@@ -5,16 +5,10 @@ import { loginSchema } from "../../utils/schema";
 
 export const login = async (req: Request, res: Response) => {
   try {
-    const parsed = loginSchema.safeParse(req.body);
-    if (!parsed.success) {
-      return res
-        .status(400)
-        .json({ message: "Invalid input", errors: parsed.error.format() });
-    }
-
     const { email, password } = req.body;
 
     console.log("BODY:", req.body);
+
     const user = await prisma.user.findUnique({
       where: { email },
     });

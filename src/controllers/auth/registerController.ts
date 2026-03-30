@@ -5,16 +5,7 @@ import { registerSchema } from "../../utils/schema";
 
 export const register = async (req: Request, res: Response) => {
   try {
-    const parsed = registerSchema.safeParse(req.body);
-
-    if (!parsed.success) {
-      return res.status(400).json({
-        message: "Invalid input",
-        errors: parsed.error.flatten(),
-      });
-    }
-
-    const { name, email, password } = parsed.data;
+    const { name, email, password } = req.body;
 
     console.log("BODY:", req.body);
 
