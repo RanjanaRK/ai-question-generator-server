@@ -30,7 +30,7 @@ export const uploadPdf = async (req: Request, res: Response) => {
     //  upload to storage
 
     const uploading = await uploadPdfStorage(
-      "pdfs",
+      "pdfAi",
       file.buffer,
       storagePath,
       file.mimetype,
