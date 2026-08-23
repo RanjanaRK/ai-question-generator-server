@@ -5,6 +5,12 @@ export const getCurrentUser = async (req: Request, res: Response) => {
   try {
     const userId = req.session.userId;
 
+    if (!userId) {
+      return res.status(401).json({
+        authenticated: false,
+      });
+    }
+
     const user = await prisma.user.findUnique({
       where: {
         id: userId,
@@ -37,7 +43,8 @@ export const getCurrentUser = async (req: Request, res: Response) => {
 
     res.json({
       success: true,
-      data: user,
+      authenticated: true,
+      user,
     });
   } catch (error) {
     console.error(error);
