@@ -81,7 +81,7 @@ export const getPdf = async (req: Request, res: Response) => {
 
     // Generate signed URL
     const { data } = await supabase.storage
-      .from("pdfs")
+      .from("pdfAi")
       .createSignedUrl(pdf.storagePath, 3600);
 
     res.json({
@@ -117,7 +117,7 @@ export const deletePdf = async (req: Request, res: Response) => {
       });
     }
 
-    await supabase.storage.from("pdfs").remove([pdf.storagePath]);
+    await supabase.storage.from("pdfAi").remove([pdf.storagePath]);
 
     await prisma.pdfDocument.delete({
       where: {
